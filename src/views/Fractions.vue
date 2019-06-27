@@ -1,10 +1,11 @@
 <template>
   <div class="fractions">
-    <div class="fractions__exp">
+    <div class="fractions__exp" v-if="showFractions">
       <div class="fraction" v-for="(val, i) in expression" :key="i">
-<!--        <p>{{val}}</p>-->
-        <Fraction :readOnly="false" @changefract="changeInstance" v-if="typeof val === 'object'" :num="calcNum(val)" :denom="calcDenom(val)" :index="i"></Fraction>
-        <MathSymbol @changesymbol="changeInstance" :index="i" v-if="typeof val === 'string'" :val="val"></MathSymbol>
+        <Fraction @changefract="changeInstance" v-if="typeof val === 'object'" :num="calcNum(val)"
+                  :readOnly="false" :denom="calcDenom(val)" :index="i"></Fraction>
+        <MathSymbol @changesymbol="changeInstance" v-if="typeof val === 'string'"
+                    :index="i" :val="val"></MathSymbol>
       </div>
       <span>=</span>
       <Fraction :readOnly="true" :num="calcNum(result)" :denom="calcDenom(result)"></Fraction>
@@ -16,39 +17,43 @@
 <script>
 import Fraction from '@/components/Fraction.vue';
 import MathSymbol from '@/components/MathSymbol.vue';
-import calcFracts, {make, num, denom} from '../fractions-lib';
+import calcFracts, { make, num, denom } from '../fractions-lib';
 
 export default {
-  name: 'home',
-  data(){
+  name: 'fractions',
+  data() {
     return {
-      expression:[make(16,32), '*', make(3,4)]
-    }
+      showFractions: true,
+      expression: [make(16, 32), '*', make(3, 4)],
+    };
   },
-  mounted(){
+  mounted() {
 
   },
-  methods:{
+  methods: {
     changeInstance(obj) {
-      const {value, index} = obj;
-      const newExp = this.expression.slice();
+      const { value, index } = obj;
 
-      newExp[index] = value;
-      this.expression = newExp;
+      this.$set(this.expression, index, value);
     },
     addFract() {
-      this.expression = [make(0, 0), '+',...this.expression];
-      console.log(this.expression);
+      this.showFractions = false;
+      this.expression = [make(0, 0), '+', ...this.expression];
+
+      // eslint-disable-next-line no-return-assign
+      this.$nextTick(() => this.showFractions = true);
     },
     calcNum: fract => num(fract),
-    calcDenom: fract => denom(fract)
+    calcDenom: fract => denom(fract),
   },
   computed: {
-    result: function() {return calcFracts(this.expression)}
+    result() {
+      return calcFracts(this.expression);
+    },
   },
   components: {
     Fraction,
-    MathSymbol
+    MathSymbol,
   },
 };
 </script>
@@ -57,14 +62,17 @@ export default {
   .fractions {
     display: flex;
     flex-direction: column;
+
     .fractions__exp {
       margin: 0 auto;
       display: flex;
       align-items: center;
+
       .fraction {
         margin: 0 5px;
       }
     }
+
     .fractions__add-fract {
       max-width: 200px;
       margin: 30px auto 0 auto;

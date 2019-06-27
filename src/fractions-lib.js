@@ -6,6 +6,8 @@ export const denom = arr => arr[1];
 
 export const isFract = fract => fract.length === 2 && Array.isArray(fract);
 
+export const isEmptyStr = str => !str.length;
+
 export const plus = (prev, next) => {
   const newNum = num(prev) * denom(next) + num(next) * denom(prev);
   const newDiv = denom(prev) * denom(next);
@@ -33,7 +35,7 @@ export const actions = {
   '/': div,
 };
 
-export const gcd = fract => {
+export const gcd = (fract) => {
   const newNum = num(fract);
   const newDenom = denom(fract);
 
@@ -42,8 +44,8 @@ export const gcd = fract => {
   return gcd(make(newDenom, newNum % newDenom));
 };
 
-export const scaleFract = fract => {
-  let gcdFract = gcd(fract);
+export const scaleFract = (fract) => {
+  const gcdFract = gcd(fract);
 
   return make(num(fract) / gcdFract, denom(fract) / gcdFract);
 };
@@ -62,34 +64,38 @@ export const doAction = (arr, i) => {
 export const removeMathSymbols = (arr, ...symbols) => {
   let result = arr.slice();
 
-  for (let i = 0; i < result.length; i++) {
+  for (let i = 0; i < result.length; i += 1) {
+    // eslint-disable-next-line no-loop-func
     if (symbols.some(symbol => symbol === result[i])) {
       result = doAction(result, i);
-      i--;
+      i -= 1;
     }
   }
 
   return result;
 };
 
-const isCorrect = arr => {
+const isCorrect = (arr) => {
   const correct = arr.reduce((acc, cur, i) => {
-    if (i % 2 !== 0 && isFract(cur)) acc = false;
+    if ((i % 2 !== 0 && isFract(cur))
+      || (i % 2 !== 0 && isEmptyStr(cur))) return false;
     return acc;
   }, true);
 
   return correct && arr.length > 2;
 };
 
-const countUp = arr => {
+const countUp = (arr) => {
   try {
     if (!isCorrect(arr)) return make(0, 0);
 
     const newArr = removeMathSymbols(arr, '*', '/');
     return scaleFract(...removeMathSymbols(newArr, '+', '-'));
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.log(e);
-    throw 'unexpected error from lib';
+    // eslint-disable-next-line no-throw-literal
+    throw 'unexpected error from fractions-lib';
   }
 };
 

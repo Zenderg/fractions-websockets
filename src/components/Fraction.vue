@@ -1,40 +1,41 @@
 <template>
   <div class="fraction">
-    <input :readonly="readOnly" @input="changeFract" v-model="readOnly ? num : dynamicNum" class="num" type="number">
+    <input :readonly="readOnly" @input="changeFract"
+           class="num" type="number" v-model="readOnly ? num : dynamicNum">
     <hr class="divider">
-    <input :readonly="readOnly" class="denom" @input="changeFract" v-model="readOnly ? denom : dynamicDenom"
-           type="number">
+    <input :readonly="readOnly" @input="changeFract"
+           class="denom" type="number" v-model="readOnly ? denom : dynamicDenom">
   </div>
 </template>
 
 <script>
-  import {make} from '../fractions-lib';
+import { make } from '../fractions-lib';
 
-  export default {
-    name: 'HelloWorld',
-    props: {
-      num: {type: Number, required: true},
-      denom: {type: Number, required: true},
-      index: {type: Number},
-      readOnly: {type: Boolean},
-    },
-    data() {
-      return {
-        dynamicNum: this.num,
-        dynamicDenom: this.denom,
+export default {
+  name: 'fraction',
+  props: {
+    num: { type: Number, required: true },
+    denom: { type: Number, required: true },
+    index: { type: Number },
+    readOnly: { type: Boolean },
+  },
+  data() {
+    return {
+      dynamicNum: this.num,
+      dynamicDenom: this.denom,
+    };
+  },
+  methods: {
+    changeFract() {
+      const option = {
+        value: make(Number(this.dynamicNum), Number(this.dynamicDenom)),
+        index: this.index,
       };
-    },
-    methods: {
-      changeFract() {
-        const option = {
-          value: make(Number(this.dynamicNum), Number(this.dynamicDenom)),
-          index: this.index
-        };
 
-        this.$emit('changefract', option);
-      },
+      this.$emit('changefract', option);
     },
-  };
+  },
+};
 </script>
 
 <style scoped lang="scss">
