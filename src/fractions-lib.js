@@ -1,8 +1,8 @@
 export const make = (num, denom) => [num, denom];
 
-export const num = arr => arr[0] || null;
+export const num = arr => arr[0];
 
-export const denom = arr => arr[1] || null;
+export const denom = arr => arr[1];
 
 export const plus = (prev, next) => {
   const newNum = num(prev) * denom(next) + num(next) * denom(prev);
@@ -79,7 +79,7 @@ const countUp = arr => {
     return scaleFract(...removeMathSymbols(newArr, '+', '-'));
   } catch (e) {
     console.log(e);
-    throw 'Введите корректное значение';
+    throw 'unexpected error from lib';
   }
 };
 

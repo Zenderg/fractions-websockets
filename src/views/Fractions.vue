@@ -30,7 +30,6 @@ export default {
   },
   methods:{
     changeInstance(obj) {
-      console.log(obj);
       const {value, index} = obj;
       const newExp = this.expression.slice();
 
