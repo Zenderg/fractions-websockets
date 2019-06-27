@@ -4,6 +4,8 @@ export const num = arr => arr[0];
 
 export const denom = arr => arr[1];
 
+export const isFract = fract => fract.length === 2 && Array.isArray(fract);
+
 export const plus = (prev, next) => {
   const newNum = num(prev) * denom(next) + num(next) * denom(prev);
   const newDiv = denom(prev) * denom(next);
@@ -70,12 +72,20 @@ export const removeMathSymbols = (arr, ...symbols) => {
   return result;
 };
 
+const isCorrect = arr => {
+  const correct = arr.reduce((acc, cur, i) => {
+    if (i % 2 !== 0 && isFract(cur)) acc = false;
+    return acc;
+  }, true);
+
+  return correct && arr.length > 2;
+};
+
 const countUp = arr => {
   try {
-    if (arr.length < 3) return null;
+    if (!isCorrect(arr)) return make(0, 0);
 
     const newArr = removeMathSymbols(arr, '*', '/');
-
     return scaleFract(...removeMathSymbols(newArr, '+', '-'));
   } catch (e) {
     console.log(e);
