@@ -20,7 +20,7 @@ import MathSymbol from '@/components/MathSymbol.vue';
 import calcFracts, { make, num, denom } from '../fractions-lib';
 
 export default {
-  name: 'fractions',
+  name: 'Fractions',
   data() {
     return {
       showFractions: true,

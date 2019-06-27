@@ -12,7 +12,7 @@
 import { make } from '../fractions-lib';
 
 export default {
-  name: 'fraction',
+  name: 'Fraction',
   props: {
     num: { type: Number, required: true },
     denom: { type: Number, required: true },
