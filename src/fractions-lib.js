@@ -1,8 +1,8 @@
 export const make = (num, denom) => [num, denom];
 
-export const num = arr => arr[0];
+export const num = arr => arr[0] || null;
 
-export const denom = arr => arr[1];
+export const denom = arr => arr[1] || null;
 
 export const plus = (prev, next) => {
   const newNum = num(prev) * denom(next) + num(next) * denom(prev);
@@ -18,16 +18,17 @@ export const minus = (prev, next) => {
   return [newNum, newDiv];
 };
 
-export const mul = (prev, next) => [num(prev) * num(next), denom(prev) * denom(next)]
+export const mul = (prev, next) => [
+  num(prev) * num(next),
+  denom(prev) * denom(next)];
 
 export const div = (prev, next) => mul(prev, [denom(next), num(next)]);
-
 
 export const actions = {
   '+': plus,
   '-': minus,
   '*': mul,
-  '/': div
+  '/': div,
 };
 
 export const gcd = fract => {
@@ -46,7 +47,7 @@ export const scaleFract = fract => {
 };
 
 export const doAction = (arr, i) => {
-  const newArr = arr;
+  const newArr = arr.slice();
   const prev = newArr[i - 1];
   const next = newArr[i + 1];
   const val = scaleFract(actions[newArr[i]](prev, next));
@@ -56,11 +57,11 @@ export const doAction = (arr, i) => {
   return newArr;
 };
 
-export const removeHighPriority = arr => {
-  let result = arr;
+export const removeMathSymbols = (arr, ...symbols) => {
+  let result = arr.slice();
 
   for (let i = 0; i < result.length; i++) {
-    if (result[i] === '*' || result[i] === '/') {
+    if (symbols.some(symbol => symbol === result[i])) {
       result = doAction(result, i);
       i--;
     }
@@ -70,18 +71,11 @@ export const removeHighPriority = arr => {
 };
 
 const countUp = arr => {
-  let newArr = removeHighPriority(arr);
+  if (arr.length < 3) return null;
 
-  for (let i = 0; i < newArr.length; i++) {
-    if (newArr[i] === '+' || newArr[i] === '-') {
-      newArr = doAction(newArr, i);
-      i--;
-    }
-  }
+  const newArr = removeMathSymbols(arr, '*', '/');
 
-  const result = scaleFract(newArr[0]);
-
-  return result;
+  return scaleFract(...removeMathSymbols(newArr, '+', '-'));
 };
 
 export default countUp;
