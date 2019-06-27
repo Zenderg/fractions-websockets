@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Fractions</router-link> |
-      <router-link to="/about">Websockets</router-link>
+      <router-link to="/websocket">Websockets</router-link>
     </div>
     <router-view/>
   </div>
