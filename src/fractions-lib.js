@@ -71,11 +71,16 @@ export const removeMathSymbols = (arr, ...symbols) => {
 };
 
 const countUp = arr => {
-  if (arr.length < 3) return null;
+  try {
+    if (arr.length < 3) return null;
 
-  const newArr = removeMathSymbols(arr, '*', '/');
+    const newArr = removeMathSymbols(arr, '*', '/');
 
-  return scaleFract(...removeMathSymbols(newArr, '+', '-'));
+    return scaleFract(...removeMathSymbols(newArr, '+', '-'));
+  } catch (e) {
+    console.log(e);
+    throw 'Введите корректное значение';
+  }
 };
 
 export default countUp;

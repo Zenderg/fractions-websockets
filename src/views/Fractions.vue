@@ -3,11 +3,11 @@
     <div class="fractions__exp">
       <div class="fraction" v-for="(val, i) in expression" :key="i">
 <!--        <p>{{val}}</p>-->
-        <Fraction v-if="typeof val === 'object'" :num="calcNum(val)" :denom="calcDenom(val)"></Fraction>
-        <MathSymbol v-if="typeof val === 'string'" :val="val"></MathSymbol>
+        <Fraction :readOnly="false" @changefract="changeInstance" v-if="typeof val === 'object'" :num="calcNum(val)" :denom="calcDenom(val)" :index="i"></Fraction>
+        <MathSymbol @changesymbol="changeInstance" :index="i" v-if="typeof val === 'string'" :val="val"></MathSymbol>
       </div>
       <span>=</span>
-      <Fraction :num="calcNum(result)" :denom="calcDenom(result)"></Fraction>
+      <Fraction :readOnly="true" :num="calcNum(result)" :denom="calcDenom(result)"></Fraction>
     </div>
     <button @click="addFract" class="fractions__add-fract">Добавить дробь</button>
   </div>
@@ -26,22 +26,26 @@ export default {
     }
   },
   mounted(){
-    // this.expression.map(item => console.log(item, typeof item));
-    // this.calculate(this.expression);
+
   },
   methods:{
-    calculate(exp){
-      console.log(calcFracts(exp));
+    changeInstance(obj) {
+      console.log(obj);
+      const {value, index} = obj;
+      const newExp = this.expression.slice();
+
+      newExp[index] = value;
+      this.expression = newExp;
     },
     addFract() {
-      this.expression = [make(0, 0), '+',...this.expression]
+      this.expression = [make(0, 0), '+',...this.expression];
       console.log(this.expression);
     },
     calcNum: fract => num(fract),
     calcDenom: fract => denom(fract)
   },
   computed: {
-    result: function(){return calcFracts(this.expression)}
+    result: function() {return calcFracts(this.expression)}
   },
   components: {
     Fraction,
