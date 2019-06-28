@@ -1,10 +1,10 @@
 <template>
   <div class="fraction">
     <input :readonly="readOnly" @input="changeFract"
-           class="num" type="number" v-model="readOnly ? num : dynamicNum">
+           class="num" type="number" v-model="dynamicNum">
     <hr class="divider">
     <input :readonly="readOnly" @input="changeFract"
-           class="denom" type="number" v-model="readOnly ? denom : dynamicDenom">
+           class="denom" type="number" v-model="dynamicDenom">
   </div>
 </template>
 
@@ -33,6 +33,14 @@ export default {
       };
 
       this.$emit('changefract', option);
+    },
+  },
+  watch: {
+    num(newVal) {
+      this.dynamicNum = newVal;
+    },
+    denom(newVal) {
+      this.dynamicDenom = newVal;
     },
   },
 };
