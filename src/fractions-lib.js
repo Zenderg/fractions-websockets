@@ -76,7 +76,8 @@ export const removeMathSymbols = (arr, ...symbols) => {
 };
 
 const isCorrect = (arr) => {
-  const correct = arr.every((cur, i) => !((i % 2 === 0 && !isFract(cur)) || (i % 2 !== 0 && !isInclude(actions, cur))));
+  const correct = arr.every((cur, i) => !((i % 2 === 0 && !isFract(cur))
+    || (i % 2 !== 0 && !isInclude(actions, cur))));
 
   return correct && arr.length % 2 !== 0;
 };

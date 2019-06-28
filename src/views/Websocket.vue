@@ -1,7 +1,8 @@
 <template>
   <div class="websocket">
     <div class="list">
-      <ItemList @remove="removeItem" v-for="item in list" :key="item.id" :id="item.id">{{item.value}}</ItemList>
+      <ItemList :id="item.id" :key="item.id"
+                @remove="removeItem" v-for="item in list">{{item.value}}</ItemList>
     </div>
   </div>
 </template>
@@ -27,7 +28,7 @@ export default {
         { value: 'Эскель', id: 9 },
         { value: 'Плотва', id: 10 },
       ],
-      removesList:{}
+      removesList: {},
     };
   },
   mounted() {
@@ -42,11 +43,11 @@ export default {
       this.socketSend(this.counter, id);
       this.counter += 1;
     },
-    findAndKill(counter){
+    findAndKill(counter) {
       const id = this.removesList[counter];
 
       this.list = this.list.filter(item => item.id !== id);
-    }
+    },
   },
   components: {
     ItemList,
