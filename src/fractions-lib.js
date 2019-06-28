@@ -4,9 +4,9 @@ export const num = arr => arr[0];
 
 export const denom = arr => arr[1];
 
-export const isFract = fract => fract.length === 2 && Array.isArray(fract);
+export const isInclude = (par, ch) => !!par[ch];
 
-export const isEmptyStr = str => !str.length;
+export const isFract = fract => fract.length === 2 && Array.isArray(fract);
 
 export const plus = (prev, next) => {
   const newNum = num(prev) * denom(next) + num(next) * denom(prev);
@@ -76,13 +76,9 @@ export const removeMathSymbols = (arr, ...symbols) => {
 };
 
 const isCorrect = (arr) => {
-  const correct = arr.reduce((acc, cur, i) => {
-    if ((i % 2 !== 0 && isFract(cur))
-      || (i % 2 !== 0 && isEmptyStr(cur))) return false;
-    return acc;
-  }, true);
+  const correct = arr.every((cur, i) => !((i % 2 === 0 && !isFract(cur)) || (i % 2 !== 0 && !isInclude(actions, cur))));
 
-  return correct && arr.length > 2;
+  return correct && arr.length % 2 !== 0;
 };
 
 const countUp = (arr) => {

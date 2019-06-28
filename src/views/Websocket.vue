@@ -27,31 +27,25 @@ export default {
         { value: 'Эскель', id: 9 },
         { value: 'Плотва', id: 10 },
       ],
+      removesList:{}
     };
   },
   mounted() {
-    // this.socketSend(1);
-    // this.socketSend(2);
-    // this.socketSend(3);
-    // this.socketSend(4);
+    this.socket.onmessage = event => this.findAndKill(event.data);
   },
   methods: {
     socketSend(val, id) {
+      this.removesList[val] = id;
       this.socket.send(val);
-      return new Promise((resolve, reject) => {
-        this.socket.addEventListener('message', (event) => {
-          resolve(id);
-          // console.log('Message from server ', event.data);
-        });
-      });
     },
     removeItem(id) {
-      this.socketSend(this.counter, id).then(id => this.findAndKill(id));
+      this.socketSend(this.counter, id);
       this.counter += 1;
     },
-    findAndKill(id){
-      const index = this.list.findIndex(item => item.id === id);
-      this.list.splice(index, 1);
+    findAndKill(counter){
+      const id = this.removesList[counter];
+
+      this.list = this.list.filter(item => item.id !== id);
     }
   },
   components: {

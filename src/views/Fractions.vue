@@ -27,9 +27,6 @@ export default {
       expression: [make(16, 32), '*', make(3, 4)],
     };
   },
-  mounted() {
-
-  },
   methods: {
     changeInstance(obj) {
       const { value, index } = obj;
